@@ -10,14 +10,17 @@ public class App {
 
 	public static void main(String[] args) {
 
-		//TESTE LEITURA DE DADOS DO ARQUIVO EQUIPMENT
+		//TESTE LEITURA DE DADOS DO ARQUIVO EQUIPMENT.DAT
 	    GerenciadorAeronaves gerenciadorAeronaves = new GerenciadorAeronaves();
         System.out.println(gerenciadorAeronaves.listarTodas().size());
 
-        //TESTE LEITURA DE DADOS DO ARQUIVO AIRLINES
+        //TESTE LEITURA DE DADOS DO ARQUIVO AIRLINES.DAT
 		GerenciadorCias gerenciadorCias = new GerenciadorCias();
 		System.out.println(gerenciadorCias.listarTodas().size());
 
+        //TESTE LEITURA DE DADOS DO ARQUIVO COUNTRIES.DAT
+        GerenciadorPaises gerenciadorPaises = new GerenciadorPaises();
+        System.out.println(gerenciadorPaises.listarTodas().size());
 
 //---------------------------------------------------------------------------------/
 //		GerenciadorCias gerCias = new GerenciadorCias();
