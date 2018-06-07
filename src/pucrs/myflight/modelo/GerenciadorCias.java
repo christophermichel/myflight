@@ -1,5 +1,6 @@
 package pucrs.myflight.modelo;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
@@ -14,6 +15,29 @@ public class GerenciadorCias {
 //        this.empresas = new HashMap<>();
 //        this.empresas = new TreeMap<>();
         this.empresas = new LinkedHashMap<>();
+
+        Path path2 = Paths.get("airlines.dat");
+        try (BufferedReader br = Files.newBufferedReader(path2, Charset.defaultCharset()))
+        {
+            String header = br.readLine();
+            String linha = null;
+            while((linha = br.readLine()) != null) {
+                Scanner sc = new Scanner(linha).useDelimiter(";"); // separador é ;
+                String codigo, nome;
+                codigo = sc.next();
+                nome = sc.next();
+
+                CiaAerea cia = new CiaAerea(codigo, nome);
+                this.empresas.put(cia.getCodigo(), cia);
+            }
+        }
+        catch (IOException x) {
+            System.err.format("Erro de E/S: %s%n", x);
+        }
+        catch (Exception e) {
+
+        }
+
     }
 
     public ArrayList<CiaAerea> listarTodas() {
