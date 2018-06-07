@@ -1,8 +1,15 @@
 package pucrs.myflight.modelo;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Scanner;
 
 public class GerenciadorAeronaves {
 
@@ -10,6 +17,33 @@ public class GerenciadorAeronaves {
 
     public GerenciadorAeronaves() {
         this.avioes = new ArrayList<>();
+
+
+        Path path2 = Paths.get("equipment.dat");
+        try (BufferedReader br = Files.newBufferedReader(path2, Charset.defaultCharset()))
+        {
+            String header = br.readLine();
+            String linha = null;
+            while((linha = br.readLine()) != null) {
+                Scanner sc = new Scanner(linha).useDelimiter(";"); // separador é ;
+                String codigo, descricao;
+                int capacidade;
+                codigo = sc.next();
+                descricao = sc.next();
+                capacidade = Integer.parseInt(sc.next());
+
+                Aeronave aero = new Aeronave(codigo, descricao,capacidade);
+                this.avioes.add(aero);
+            }
+        }
+        catch (IOException x) {
+            System.err.format("Erro de E/S: %s%n", x);
+        }
+        catch (Exception e) {
+
+        }
+
+
     }
 
     public void adicionar(Aeronave aviao) {
@@ -26,6 +60,8 @@ public class GerenciadorAeronaves {
                 return a;
         return null;
     }
+
+
 
     public void ordenarDescricao() {
         // Usando Comparable<Aeronave> em Aeronave
