@@ -117,7 +117,7 @@ public class JanelaFX extends Application {
 		Aeroporto gru = new Aeroporto("GRU", "Guarulhos", new Geo(-23.4356, -46.4731));
 		Aeroporto lis = new Aeroporto("LIS", "Lisbon", new Geo(38.772,-9.1342));
 		Aeroporto mia = new Aeroporto("MIA", "Miami International", new Geo(25.7933, -80.2906));
-		
+
 		gerenciador.clear();
 		Tracado tr = new Tracado();
 		tr.setLabel("Teste");
@@ -127,17 +127,17 @@ public class JanelaFX extends Application {
 		tr.addPonto(mia.getLocal());
 
 		gerenciador.addTracado(tr);
-		
+
 		Tracado tr2 = new Tracado();
 		tr2.setWidth(5);
 		tr2.setCor(Color.BLUE);
 		tr2.addPonto(gru.getLocal());
 		tr2.addPonto(lis.getLocal());
 		gerenciador.addTracado(tr2);
-		
+
 		// Adiciona os locais de cada aeroporto (sem repetir) na lista de
 		// waypoints
-		
+
 		lstPoints.add(new MyWaypoint(Color.RED, poa.getCodigo(), poa.getLocal(), 5));
 		lstPoints.add(new MyWaypoint(Color.RED, gru.getCodigo(), gru.getLocal(), 5));
 		lstPoints.add(new MyWaypoint(Color.RED, lis.getCodigo(), lis.getLocal(), 5));

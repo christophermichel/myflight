@@ -22,6 +22,10 @@ public class App {
         GerenciadorPaises gerenciadorPaises = new GerenciadorPaises();
         System.out.println(gerenciadorPaises.listarTodas().size());
 
+        //TESTE LEITURA DE DADOS DO ARQUIVO AIRPORTS.DAT
+        GerenciadorAeroportos gerenciadorAeroportos = new GerenciadorAeroportos();
+        System.out.println(gerenciadorAeroportos.listarTodos().size());
+
 //---------------------------------------------------------------------------------/
 //		GerenciadorCias gerCias = new GerenciadorCias();
 //
