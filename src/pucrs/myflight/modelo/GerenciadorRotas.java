@@ -22,6 +22,11 @@ public class GerenciadorRotas {
         {
             String header = br.readLine();
             String linha = null;
+
+            GerenciadorCias gerenciadorCias = new GerenciadorCias();
+            GerenciadorAeroportos gerenciadorAeroportos = new GerenciadorAeroportos();
+            GerenciadorAeronaves gerenciadorAeronaves = new GerenciadorAeronaves();
+
             while((linha = br.readLine()) != null) {
                 Scanner sc = new Scanner(linha).useDelimiter(";"); // separador é ;
                 String codCia, codAeroOrigem, codAeroDestino, codeshare, paradas, codAeronave;
@@ -33,8 +38,12 @@ public class GerenciadorRotas {
                 paradas = sc.next();
                 codAeronave = sc.next();
 
-//              Rota rota = mew Rota();
-//              this.rotas.add(rota);
+
+
+                Rota rota = new Rota(gerenciadorCias.buscarCodigo(codCia), gerenciadorAeroportos.buscarCodigo(codAeroOrigem),
+                        gerenciadorAeroportos.buscarCodigo(codAeroDestino), gerenciadorAeronaves.buscarCodigo(codAeronave));
+
+                this.rotas.add(rota);
             }
         }
         catch (IOException x) {

@@ -26,6 +26,9 @@ public class App {
         GerenciadorAeroportos gerenciadorAeroportos = new GerenciadorAeroportos();
         System.out.println(gerenciadorAeroportos.listarTodos().size());
 
+        //TESTE LEITURA DE DADOS DO ARQUIVO ROUTES.DAT
+        GerenciadorRotas gerenciadorRotas = new GerenciadorRotas();
+        System.out.println(gerenciadorRotas.listarTodas().size());
 //---------------------------------------------------------------------------------/
 //		GerenciadorCias gerCias = new GerenciadorCias();
 //
