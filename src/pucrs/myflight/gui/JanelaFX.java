@@ -12,8 +12,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import javax.swing.SwingUtilities;
 
+import javax.swing.SwingUtilities;
+import javax.xml.soap.Text;
+
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.viewer.GeoPosition;
 
@@ -54,6 +60,8 @@ public class JanelaFX extends Application {
 	private ObservableList<CiaAerea> comboCiasData;
 	private ComboBox<CiaAerea> comboCia;
 
+	private  TextField tfName;
+
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 
@@ -76,7 +84,7 @@ public class JanelaFX extends Application {
 		leftPane.setPadding(new Insets(10, 10, 10, 10));
 
 		Button btnConsulta1 = new Button("Consulta 1");
-		Button btnConsulta2 = new Button("Consulta 2");
+		Button btnConsulta2 = new Button("Aeroportos de uma Cia");
 		Button btnConsulta3 = new Button("Consulta 3");
 		Button btnConsulta4 = new Button("Consulta 4");
 
@@ -87,7 +95,11 @@ public class JanelaFX extends Application {
 
 		btnConsulta1.setOnAction(e -> {
 			consulta1();
-		});			
+		});
+
+		btnConsulta2.setOnAction(e -> {
+			aeroportosDeUmaCia(leftPane);
+		});
 
 		pane.setCenter(mapkit);
 		pane.setTop(leftPane);
@@ -153,6 +165,36 @@ public class JanelaFX extends Application {
 		// gerenciador.clear();
 
 		gerenciador.getMapKit().repaint();
+	}
+
+	private void  aeroportosDeUmaCia(GridPane leftPane) {
+		// Lista para armazenar o resultado da consulta
+		List<MyWaypoint> lstPoints = new ArrayList<>();
+
+		gerenciador.clear();
+
+		leftPane.add(new Label("De:"), 6, 0);
+		comboCia = new ComboBox(FXCollections.observableList(gerCias.listarTodas()));
+		leftPane.add(comboCia, 7, 0);
+
+		// Adiciona os locais de cada aeroporto (sem repetir) na lista de
+		// waypoints
+
+//		lstPoints.add(new MyWaypoint(Color.RED, poa.getCodigo(), poa.getLocal(), 5));
+//		lstPoints.add(new MyWaypoint(Color.RED, gru.getCodigo(), gru.getLocal(), 5));
+//		lstPoints.add(new MyWaypoint(Color.RED, lis.getCodigo(), lis.getLocal(), 5));
+//		lstPoints.add(new MyWaypoint(Color.RED, mia.getCodigo(), mia.getLocal(), 5));
+
+		// Para obter um ponto clicado no mapa, usar como segue:
+		// GeoPosition pos = gerenciador.getPosicao();
+
+		// Informa o resultado para o gerenciador
+//		gerenciador.setPontos(lstPoints);
+
+		// Quando for o caso de limpar os traçados...
+		// gerenciador.clear();
+
+//		gerenciador.getMapKit().repaint();
 	}
 
 	private class EventosMouse extends MouseAdapter {
