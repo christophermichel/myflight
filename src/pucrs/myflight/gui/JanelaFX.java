@@ -173,9 +173,15 @@ public class JanelaFX extends Application {
 
 		gerenciador.clear();
 
-		leftPane.add(new Label("De:"), 6, 0);
+		leftPane.add(new Label("Aeroporto:"), 1, 1);
 		comboCia = new ComboBox(FXCollections.observableList(gerCias.listarTodas()));
-		leftPane.add(comboCia, 7, 0);
+		leftPane.add(comboCia, 2, 1);
+		Button consultar = new Button("Consultar");
+		leftPane.add(consultar, 2,2);
+		consultar.setOnAction(e -> {
+//			lstPoints.add(new MyWaypoint((Color.RED, comboCia.getValue().getCodigo(),)));
+		});
+
 
 		// Adiciona os locais de cada aeroporto (sem repetir) na lista de
 		// waypoints
