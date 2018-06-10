@@ -95,4 +95,29 @@ public class GerenciadorAeroportos {
                 .filter(aero -> aero.getCodPais().equals(codPais))
                 .collect(Collectors.toCollection(ArrayList::new));
     }
+
+    public ArrayList<TrafegoAeroporto> estimativaTrafegoPorAeroporto (GerenciadorRotas gr) {
+        return this.estimativaTrafegoPorAeroporto(gr, null);
+    }
+
+    public ArrayList<TrafegoAeroporto> estimativaTrafegoPorAeroporto (GerenciadorRotas gr, String codigoPais) {
+
+        ArrayList<TrafegoAeroporto> trafegoAeroportos = new ArrayList<>();
+
+        if(codigoPais == null){
+            for (Aeroporto aero: this.aeroportos) {
+                int numeroDeRotas = gr.listarRotasPorCodigoAeroporto(aero.getCodigo()).size();
+                TrafegoAeroporto ta = new TrafegoAeroporto(aero, numeroDeRotas);
+                trafegoAeroportos.add(ta);
+            }
+
+        } else {
+            for (Aeroporto aeroPais : listarAeroportosDeUmPais(codigoPais)) {
+                int numeroDeRotas = gr.listarRotasPorCodigoAeroporto(aeroPais.getCodigo()).size();
+                TrafegoAeroporto ta = new TrafegoAeroporto(aeroPais, numeroDeRotas);
+                trafegoAeroportos.add(ta);
+            }
+        }
+        return trafegoAeroportos;
+    }
 }

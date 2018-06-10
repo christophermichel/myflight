@@ -1,5 +1,7 @@
 package pucrs.myflight.modelo;
 
+import pucrs.myflight.modelo.models.TrafegoAeroporto;
+
 import java.io.IOException;
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -31,6 +33,10 @@ public class App {
         System.out.println(gerenciadorRotas.listarTodas().size());
 
         gerenciadorAeroportos.listarAeroportosPorCodCompanhia("2B", gerenciadorRotas);
+
+        ArrayList<TrafegoAeroporto> ta = gerenciadorAeroportos.estimativaTrafegoPorAeroporto(gerenciadorRotas, "BR");
+
+        System.out.println(ta.size());
 //---------------------------------------------------------------------------------/
 //		GerenciadorCias gerCias = new GerenciadorCias();
 //
