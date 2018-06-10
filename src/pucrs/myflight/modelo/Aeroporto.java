@@ -33,6 +33,10 @@ public class Aeroporto implements Comparable<Aeroporto> {
 		return loc;
 	}
 
+	public String getCodPais() {
+		return this.codPais;
+	}
+
     @Override
     public String toString() {
         return codigo + " - " + nome + " [" + loc + "]";
