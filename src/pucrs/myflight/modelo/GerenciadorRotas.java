@@ -9,6 +9,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 public class GerenciadorRotas {
 
@@ -95,5 +96,11 @@ public class GerenciadorRotas {
             if(r.getOrigem().getCodigo().equals(codigo))
                 result.add(r);
         return result;
+    }
+
+    public ArrayList<Rota> listarRotasPorCodCompanhia(String codCompanhia) {
+        return this.rotas.stream()
+                         .filter(x -> x.getCia().getCodigo().equals(codCompanhia))
+                         .collect(Collectors.toCollection(ArrayList::new));
     }
 }
