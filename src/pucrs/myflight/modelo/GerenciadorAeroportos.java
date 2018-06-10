@@ -1,14 +1,18 @@
 package pucrs.myflight.modelo;
 
+import javafx.beans.Observable;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Scanner;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public class GerenciadorAeroportos {
 
@@ -66,5 +70,21 @@ public class GerenciadorAeroportos {
             if(a.getCodigo().equals(codigo))
                 return a;
         return null;
+    }
+
+    public ArrayList<Aeroporto> listarAeroportosPorCodCompanhia(String codCompanhia, GerenciadorRotas gr) {
+        ArrayList<Rota> rotas = gr.listarRotasPorCodCompanhia(codCompanhia);
+        Set<Aeroporto> listaAeroportos = new HashSet<>();
+        ArrayList<Aeroporto> origens = rotas.stream().map(x -> x.getOrigem()).collect(Collectors.toCollection(ArrayList::new));
+        ArrayList<Aeroporto> destinos = rotas.stream().map(x -> x.getDestino()).collect(Collectors.toCollection(ArrayList::new));
+
+        for (Aeroporto aeroporto : origens) {
+            listaAeroportos.add(aeroporto);
+        }
+        for (Aeroporto aeroporto : destinos) {
+            listaAeroportos.add(aeroporto);
+        }
+
+        return new ArrayList<Aeroporto>(listaAeroportos);
     }
 }
