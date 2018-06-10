@@ -1,6 +1,7 @@
 package pucrs.myflight.modelo;
 
 import javafx.beans.Observable;
+import pucrs.myflight.modelo.models.TrafegoAeroporto;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -86,5 +87,12 @@ public class GerenciadorAeroportos {
         }
 
         return new ArrayList<Aeroporto>(listaAeroportos);
+    }
+
+    public ArrayList<Aeroporto> listarAeroportosDeUmPais(String codPais) {
+        return this.aeroportos
+                .stream()
+                .filter(aero -> aero.getCodPais().equals(codPais))
+                .collect(Collectors.toCollection(ArrayList::new));
     }
 }
