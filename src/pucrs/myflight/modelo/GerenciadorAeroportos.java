@@ -16,8 +16,20 @@ public class GerenciadorAeroportos {
 
     public GerenciadorAeroportos() {
         this.aeroportos = new ArrayList<>();
+        carregaDados("airports.dat");
+    }
 
-        Path path2 = Paths.get("airports.dat");
+    public void ordenarNomes() {
+        Collections.sort(aeroportos);
+    }
+
+    public void adicionar(Aeroporto aero) {
+        aeroportos.add(aero);
+    }
+
+    public void carregaDados(String nomeArq){
+
+        Path path2 = Paths.get(nomeArq);
         try (BufferedReader br = Files.newBufferedReader(path2, Charset.defaultCharset()))
         {
             String header = br.readLine();
@@ -38,19 +50,11 @@ public class GerenciadorAeroportos {
             }
         }
         catch (IOException x) {
-            System.err.format("Erro de E/S: %s%n", x);
+            System.err.format("Erro na manipulação do arquivo.");
         }
         catch (Exception e) {
-
+            System.out.println(e.getMessage());
         }
-    }
-
-    public void ordenarNomes() {
-        Collections.sort(aeroportos);
-    }
-
-    public void adicionar(Aeroporto aero) {
-        aeroportos.add(aero);
     }
 
     public ArrayList<Aeroporto> listarTodos() {

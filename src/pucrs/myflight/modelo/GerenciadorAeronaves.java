@@ -17,9 +17,16 @@ public class GerenciadorAeronaves {
 
     public GerenciadorAeronaves() {
         this.avioes = new ArrayList<>();
+        carregaDados("equipment.dat");
+    }
 
+    public void adicionar(Aeronave aviao) {
+        avioes.add(aviao);
+    }
 
-        Path path2 = Paths.get("equipment.dat");
+    public void carregaDados(String nomeArq){
+
+        Path path2 = Paths.get(nomeArq);
         try (BufferedReader br = Files.newBufferedReader(path2, Charset.defaultCharset()))
         {
             String header = br.readLine();
@@ -37,17 +44,11 @@ public class GerenciadorAeronaves {
             }
         }
         catch (IOException x) {
-            System.err.format("Erro de E/S: %s%n", x);
+            System.err.format("Erro na manipulação do arquivo.");
         }
         catch (Exception e) {
-
+            System.out.println(e.getMessage());
         }
-
-
-    }
-
-    public void adicionar(Aeronave aviao) {
-        avioes.add(aviao);
     }
 
     public ArrayList<Aeronave> listarTodas() {

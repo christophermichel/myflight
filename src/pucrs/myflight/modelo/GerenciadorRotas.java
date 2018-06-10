@@ -16,8 +16,12 @@ public class GerenciadorRotas {
 
     public GerenciadorRotas() {
         this.rotas = new ArrayList<>();
+        carregaDados("routes.dat");
+    }
 
-        Path path2 = Paths.get("routes.dat");
+    public void carregaDados(String nomeArq){
+
+        Path path2 = Paths.get(nomeArq);
         try (BufferedReader br = Files.newBufferedReader(path2, Charset.defaultCharset()))
         {
             String header = br.readLine();
@@ -38,21 +42,17 @@ public class GerenciadorRotas {
                 paradas = sc.next();
                 codAeronave = sc.next();
 
-
-
                 Rota rota = new Rota(gerenciadorCias.buscarCodigo(codCia), gerenciadorAeroportos.buscarCodigo(codAeroOrigem),
                         gerenciadorAeroportos.buscarCodigo(codAeroDestino), gerenciadorAeronaves.buscarCodigo(codAeronave));
-
                 this.rotas.add(rota);
             }
         }
         catch (IOException x) {
-            System.err.format("Erro de E/S: %s%n", x);
+            System.err.format("Erro na manipulação do arquivo.");
         }
         catch (Exception e) {
-
+            System.out.println(e.getMessage());
         }
-
     }
 
     public void ordenarCias() {

@@ -11,12 +11,17 @@ import java.util.*;
 public class GerenciadorCias {
     private Map<String, CiaAerea> empresas;
 
-    public GerenciadorCias() {
-//        this.empresas = new HashMap<>();
-//        this.empresas = new TreeMap<>();
+    public GerenciadorCias(){
         this.empresas = new LinkedHashMap<>();
+        carregaDados("airlines.dat");
+    }
 
-        Path path2 = Paths.get("airlines.dat");
+    public ArrayList<CiaAerea> listarTodas() {
+        return new ArrayList<>(empresas.values());
+    }
+
+    public void carregaDados(String nomeArq){
+        Path path2 = Paths.get(nomeArq);
         try (BufferedReader br = Files.newBufferedReader(path2, Charset.defaultCharset()))
         {
             String header = br.readLine();
@@ -32,31 +37,10 @@ public class GerenciadorCias {
             }
         }
         catch (IOException x) {
-            System.err.format("Erro de E/S: %s%n", x);
+            System.err.format("Erro na manipulação do arquivo.");
         }
         catch (Exception e) {
-
-        }
-
-    }
-
-    public ArrayList<CiaAerea> listarTodas() {
-        return new ArrayList<>(empresas.values());
-    }
-
-    public void carregaDados(String nomeArq) throws IOException {
-        Path path = Paths.get(nomeArq);
-        try (Scanner sc = new Scanner(Files.newBufferedReader(path, Charset.forName("utf8")))) {
-            sc.useDelimiter("[;\n]"); // separadores: ; e nova linha
-            String header = sc.nextLine(); // pula cabeçalho
-            String cod, nome;
-            while (sc.hasNext()) {
-                cod = sc.next();
-                nome = sc.next();
-                CiaAerea nova = new CiaAerea(cod, nome);
-                adicionar(nova);
-                //System.out.format("%s - %s (%s)%n", nome, data, cpf);
-            }
+            System.out.println(e.getMessage());
         }
     }
 

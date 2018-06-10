@@ -15,8 +15,14 @@ public class GerenciadorPaises {
 
     public GerenciadorPaises() {
         this.paises = new ArrayList<>();
+        carregaDados("countries.dat");
+    }
 
-        Path path2 = Paths.get("countries.dat");
+    public void adicionar(Pais pais) { this.paises.add(pais); }
+
+    public void carregaDados(String nomeArq){
+
+        Path path2 = Paths.get(nomeArq);
         try (BufferedReader br = Files.newBufferedReader(path2, Charset.defaultCharset()))
         {
             String header = br.readLine();
@@ -33,14 +39,12 @@ public class GerenciadorPaises {
             }
         }
         catch (IOException x) {
-            System.err.format("Erro de E/S: %s%n", x);
+            System.err.format("Erro na manipulação do arquivo.");
         }
         catch (Exception e) {
-
+            System.out.println(e.getMessage());
         }
     }
-
-    public void adicionar(Pais pais) { this.paises.add(pais); }
 
     public ArrayList<Pais> listarTodas() { return new ArrayList<>(paises); }
 
