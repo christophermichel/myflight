@@ -10,4 +10,8 @@ public class TrafegoAeroporto {
         this.aeroporto = aero;
         this.numeroDeRotas = numRotas;
     }
+
+    public Aeroporto getAeroporto() { return this.aeroporto; }
+
+    public int getNumeroDeRotas() { return this.numeroDeRotas; }
 }

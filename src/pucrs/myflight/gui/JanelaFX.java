@@ -42,6 +42,7 @@ import pucrs.myflight.modelo.GerenciadorAeroportos;
 import pucrs.myflight.modelo.GerenciadorCias;
 import pucrs.myflight.modelo.GerenciadorRotas;
 import pucrs.myflight.modelo.Rota;
+import pucrs.myflight.modelo.models.TrafegoAeroporto;
 
 public class JanelaFX extends Application {
 
@@ -84,7 +85,7 @@ public class JanelaFX extends Application {
 
 		Button btnConsulta1 = new Button("Consulta 1");
 		Button btnConsulta2 = new Button("Aeroportos de uma Cia");
-		Button btnConsulta3 = new Button("Consulta 3");
+		Button btnConsulta3 = new Button("Trafego nos Aeroportos");
 		Button btnConsulta4 = new Button("Consulta 4");
 
 		leftPane.add(btnConsulta1, 0, 0);
@@ -98,6 +99,10 @@ public class JanelaFX extends Application {
 
 		btnConsulta2.setOnAction(e -> {
 			aeroportosDeUmaCia(leftPane);
+		});
+
+		btnConsulta3.setOnAction(e -> {
+			volumeDeTrafego();
 		});
 
 		pane.setCenter(mapkit);
@@ -210,8 +215,21 @@ public class JanelaFX extends Application {
 		// Quando for o caso de limpar os traçados...
 		// gerenciador.clear();
 
-		gerenciador.getMapKit().repaint();
 	}
+
+	private void volumeDeTrafego() {
+		ArrayList<TrafegoAeroporto> ta = gerAero.estimativaTrafegoPorAeroporto(gerRotas);
+		List<MyWaypoint> lstPoints = new ArrayList<>();
+		gerenciador.clear();
+		for (TrafegoAeroporto trafego: ta) {
+			lstPoints.add(new MyWaypoint(Color.GREEN, trafego.getAeroporto().getCodigo(), trafego.getAeroporto().getLocal(), trafego.getNumeroDeRotas()));
+		}
+		gerenciador.setPontos(lstPoints);
+		gerenciador.getMapKit().repaint();
+
+
+	}
+
 
 	private class EventosMouse extends MouseAdapter {
 		private int lastButton = -1;
