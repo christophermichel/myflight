@@ -178,7 +178,18 @@ public class JanelaFX extends Application {
 		Button consultar = new Button("Consultar");
 		leftPane.add(consultar, 2,2);
 		consultar.setOnAction(e -> {
-//			lstPoints.add(new MyWaypoint((Color.RED, comboCia.getValue().getCodigo(),)));
+			System.out.println(comboCia.getValue().getNome());
+			ArrayList<Aeroporto> aeroportos = gerAero.listarAeroportosPorCodCompanhia(comboCia.getValue().getCodigo(), gerRotas);
+
+			for (Aeroporto a: aeroportos) {
+				lstPoints.add(new MyWaypoint(Color.RED, a.getCodigo(), a.getLocal(), 50));
+			}
+
+//			GeoPosition pos = new GeoPosition(aeroportos.get(0).getLocal().getLatitude(), aeroportos.get(0).getLocal().getLongitude());
+//			gerenciador.setPosicao(pos);
+			gerenciador.setPontos(lstPoints);
+			gerenciador.getMapKit().repaint();
+//			lstPoints.add(new MyWaypoint((Color.RED, , 5));
 		});
 
 
@@ -194,12 +205,12 @@ public class JanelaFX extends Application {
 		// GeoPosition pos = gerenciador.getPosicao();
 
 		// Informa o resultado para o gerenciador
-//		gerenciador.setPontos(lstPoints);
+		gerenciador.setPontos(lstPoints);
 
 		// Quando for o caso de limpar os traçados...
 		// gerenciador.clear();
 
-//		gerenciador.getMapKit().repaint();
+		gerenciador.getMapKit().repaint();
 	}
 
 	private class EventosMouse extends MouseAdapter {
