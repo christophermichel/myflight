@@ -6,9 +6,7 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Scanner;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class GerenciadorRotas {
@@ -82,6 +80,7 @@ public class GerenciadorRotas {
                    r2.getCia().getNome());
         });
     }
+
     public void adicionar(Rota r) {
         rotas.add(r);
     }
@@ -96,6 +95,23 @@ public class GerenciadorRotas {
             if(r.getOrigem().getCodigo().equals(codigo))
                 result.add(r);
         return result;
+    }
+
+    public ArrayList<Rota> getRotasComUmaOrigemEspecifica(Aeroporto origem) {
+        return this.rotas
+                .stream()
+                .filter(rota -> rota.getOrigem().getCodigo().equals(origem.getCodigo()))
+                .collect(Collectors.toCollection(ArrayList::new));
+    }
+
+    public ArrayList<Aeroporto> listarAeroportosAlcancaveisAteUmTempo(Aeroporto origem) {
+        ArrayList<Rota> rotasDeUmaOrigem = new ArrayList<>(getRotasComUmaOrigemEspecifica(origem));
+        Set<Aeroporto> listaAeroportos = new HashSet<>();
+        for(Rota a: rotasDeUmaOrigem){
+            listaAeroportos.add(a.getDestino());
+        }
+
+        return new ArrayList<>(listaAeroportos);
     }
 
     public ArrayList<Rota> listarRotasPorCodCompanhia(String codCompanhia) {
