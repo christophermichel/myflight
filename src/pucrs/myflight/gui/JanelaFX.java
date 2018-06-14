@@ -85,7 +85,7 @@ public class JanelaFX extends Application {
 
 		Button btnConsulta1 = new Button("Aeroportos de uma Cia");
 		Button btnConsulta2 = new Button("Volume de Trafego");
-		Button btnConsulta3 = new Button("Consulta 3");
+		Button btnConsulta3 = new Button("Rotas entre Aeroportos");
 		Button btnConsulta4 = new Button("Aeroportos Próximos");
 
 		leftPane.add(btnConsulta1, 0, 0);
@@ -99,6 +99,10 @@ public class JanelaFX extends Application {
 
 		btnConsulta2.setOnAction(e -> {
 			volumeDeTrafego(leftPane);
+		});
+
+		btnConsulta3.setOnAction(e -> {
+			rotasEntreAeroportos(leftPane);
 		});
 
 		btnConsulta4.setOnAction(e -> {
@@ -236,6 +240,10 @@ public class JanelaFX extends Application {
 		});
 	}
 
+	private void rotasEntreAeroportos(GridPane leftPane) {
+
+	}
+
 	private void mostrarTodosOsAeroportosAlcançáveisAtéUmTempo(GridPane leftPane) {
 		List<MyWaypoint> lstPoints = new ArrayList<>();
 		gerenciador.clear();
@@ -264,8 +272,15 @@ public class JanelaFX extends Application {
 
 			lstPoints.add(new MyWaypoint(Color.RED, comboAero.getValue().getCodigo(), comboAero.getValue().getLocal(), 50));
 
-			for(Aeroporto a: aeroportos) {
 
+			for(Aeroporto a: aeroportos) {
+				Tracado tr = new Tracado();
+				tr.setLabel("Teste");
+				tr.setWidth(5);
+				tr.setCor(new Color(0,0,0,60));
+				tr.addPonto(comboAero.getValue().getLocal());
+				tr.addPonto(a.getLocal());
+				gerenciador.addTracado(tr);
 				lstPoints.add(new MyWaypoint(Color.BLUE, a.getCodigo(), a.getLocal(), 35));
 			}
 			gerenciador.setPontos(lstPoints);
