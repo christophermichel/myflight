@@ -104,16 +104,6 @@ public class GerenciadorRotas {
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 
-    public ArrayList<Aeroporto> listarAeroportosAlcancaveisAteUmTempo(Aeroporto origem) {
-        ArrayList<Rota> rotasDeUmaOrigem = new ArrayList<>(getRotasComUmaOrigemEspecifica(origem));
-        Set<Aeroporto> listaAeroportos = new HashSet<>();
-        for(Rota a: rotasDeUmaOrigem){
-            listaAeroportos.add(a.getDestino());
-        }
-
-        return new ArrayList<>(listaAeroportos);
-    }
-
     public ArrayList<Rota> listarRotasPorCodCompanhia(String codCompanhia) {
         return this.rotas.stream()
                          .filter(x -> x.getCia().getCodigo().equals(codCompanhia))

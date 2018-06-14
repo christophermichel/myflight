@@ -15,6 +15,8 @@ import java.util.Map.Entry;
 
 import javax.swing.SwingUtilities;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
 import javafx.scene.control.Label;
@@ -245,17 +247,26 @@ public class JanelaFX extends Application {
 		Button consultar = new Button("Consultar");
 		leftPane.add(consultar, 4, 3);
 
-		consultar.setOnAction(e -> {
-			ArrayList<Aeroporto> aeroportos = gerRotas.listarAeroportosAlcancaveisAteUmTempo(comboAero.getValue());
+		tempo.textProperty().addListener(new ChangeListener<String>() {
+			@Override
+			public void changed(ObservableValue<? extends String> observable, String oldValue,
+								String newValue) {
+				if (!newValue.matches("\\d*")) {
+					tempo.setText(newValue.replaceAll("[^\\d]", ""));
+				}
+			}
+		});
 
-//			d = v/t
-			int velocidade = 805;
+		consultar.setOnAction(e -> {
+
+			double numeroHoras = Double.parseDouble(tempo.getText());
+			ArrayList<Aeroporto> aeroportos = gerAero.listarAeroportosAlcancaveisAteUmTempo(comboAero.getValue(), numeroHoras, gerRotas);
+
+			lstPoints.add(new MyWaypoint(Color.RED, comboAero.getValue().getCodigo(), comboAero.getValue().getLocal(), 50));
 
 			for(Aeroporto a: aeroportos) {
-				if((a.getLocal().distancia(comboAero.getValue().getLocal()) / velocidade) < 12) {
-					System.out.println(a);
-					lstPoints.add(new MyWaypoint(Color.BLUE, a.getCodigo(), a.getLocal(), 50));
-				}
+
+				lstPoints.add(new MyWaypoint(Color.BLUE, a.getCodigo(), a.getLocal(), 35));
 			}
 			gerenciador.setPontos(lstPoints);
 			gerenciador.getMapKit().repaint();

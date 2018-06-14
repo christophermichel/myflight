@@ -9,13 +9,18 @@ public class Geo extends GeoPosition {
 	public Geo(double latitude, double longitude) {
 		super(latitude, longitude);		
 	}
-	
+	public final double VELOCIDADEPADRAO = 805;
 	// Metodo para calcular a distancia entre
 	// ESTA localizacao e o outra informada
 	public double distancia(Geo outra) {
 		Geo obj = new Geo(getLatitude(), getLongitude());
 		return distancia(obj, outra);
 		//return distancia(this, outra);
+	}
+
+	public double duracaoViagem(Geo geo) {
+		double dist = this.distancia(geo);
+		return (dist/VELOCIDADEPADRAO);
 	}
 	
 	// Metodo de classe (static) para calcular

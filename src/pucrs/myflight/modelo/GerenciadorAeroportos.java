@@ -73,6 +73,19 @@ public class GerenciadorAeroportos {
         return null;
     }
 
+    public ArrayList<Aeroporto> listarAeroportosAlcancaveisAteUmTempo(Aeroporto origem, double numeroHoras, GerenciadorRotas gr) {
+        ArrayList<Rota> rotasDeUmaOrigem = new ArrayList<>(gr.getRotasComUmaOrigemEspecifica(origem));
+        Set<Aeroporto> listaAeroportos = new HashSet<>();
+        for(Rota rota: rotasDeUmaOrigem){
+            Aeroporto aero = rota.getDestino();
+            double duracaoViagem = origem.getLocal().duracaoViagem(aero.getLocal());
+
+            if(duracaoViagem < numeroHoras)
+                listaAeroportos.add(aero);
+        }
+        return new ArrayList<>(listaAeroportos);
+    }
+
     public ArrayList<Aeroporto> listarAeroportosPorCodCompanhia(String codCompanhia, GerenciadorRotas gr) {
         ArrayList<Rota> rotas = gr.listarRotasPorCodCompanhia(codCompanhia);
         Set<Aeroporto> listaAeroportos = new HashSet<>();
