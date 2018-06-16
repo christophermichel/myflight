@@ -1,6 +1,7 @@
 package pucrs.myflight.modelo;
 
 import javafx.beans.Observable;
+import pucrs.myflight.modelo.models.Conexao;
 import pucrs.myflight.modelo.models.TrafegoAeroporto;
 
 import java.io.BufferedReader;
@@ -132,5 +133,23 @@ public class GerenciadorAeroportos {
             }
         }
         return trafegoAeroportos;
+    }
+
+    public ArrayList<Conexao> listarTrajetosComUmaConexao(Aeroporto origem, Aeroporto destino, GerenciadorRotas gr) {
+
+        ArrayList<Rota> rotasDestino = gr.listarRotasComUmDestino(destino);
+        ArrayList<Rota> rotasOrigem = gr.getRotasComUmaOrigemEspecifica(origem);
+        Set<Conexao> conexao = new HashSet<>();
+
+        for (Rota rotaOrigem: rotasOrigem) {
+            for (Rota rotaDestino: rotasDestino) {
+                if(rotaOrigem.getDestino().getCodigo().equals(rotaDestino.getOrigem().getCodigo())){
+                    Conexao con = new Conexao(rotaOrigem.getOrigem(), rotaOrigem.getDestino(), rotaDestino.getDestino());
+                    conexao.add(con);
+                }
+            }
+        }
+
+        return new ArrayList<>(conexao);
     }
 }
