@@ -104,6 +104,13 @@ public class GerenciadorRotas {
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 
+    public ArrayList<Rota> listarRotasComUmDestino(Aeroporto destino) {
+        return this.rotas
+                .stream()
+                .filter(rota -> rota.getDestino().getCodigo().equals(destino.getCodigo()))
+                .collect(Collectors.toCollection(ArrayList::new));
+    }
+
     public ArrayList<Rota> listarRotasPorCodCompanhia(String codCompanhia) {
         return this.rotas.stream()
                          .filter(x -> x.getCia().getCodigo().equals(codCompanhia))
