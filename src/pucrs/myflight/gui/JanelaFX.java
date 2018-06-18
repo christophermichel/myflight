@@ -60,6 +60,7 @@ public class JanelaFX extends Application {
 	private ComboBox<CiaAerea> comboCia;
 	private ComboBox<Pais> comboPais;
 	private ComboBox<Aeroporto> comboAero;
+	private ComboBox<Aeroporto> comboAero2;
 
 	private  TextField tempo;
 
@@ -242,6 +243,47 @@ public class JanelaFX extends Application {
 	}
 
 	private void rotasEntreAeroportos(GridPane leftPane) {
+		List<MyWaypoint> lstPoints = new ArrayList<>();
+		gerenciador.clear();
+
+		comboAero = new ComboBox(FXCollections.observableList(gerAero.listarTodos()));
+		comboAero.setPromptText("Selecione o aeroporto de origem...");
+		comboAero2 = new ComboBox(FXCollections.observableList(gerAero.listarTodos()));
+		comboAero2.setPromptText("Selecione o aeroporto de destino...");
+		leftPane.add(comboAero, 3, 1);
+		leftPane.add(comboAero2, 3, 2);
+		Button consultar = new Button("Consultar");
+		leftPane.add(consultar, 3, 3);
+
+		consultar.setOnAction(e -> {
+
+			Aeroporto origem = comboAero.getValue();
+			Aeroporto destino = comboAero2.getValue();
+
+			ArrayList<Conexao> conexoes = gerAero.listarTrajetosComUmaConexao(origem, destino, gerRotas);
+
+			for (Conexao conexao: conexoes) {
+
+				MyWaypoint pontoOrigem = new MyWaypoint(Color.ORANGE, conexao.getOrigem().getCodigo(), conexao.getOrigem().getLocal(), 10);
+				MyWaypoint pontoConexao = new MyWaypoint(Color.ORANGE, conexao.getConexao().getCodigo(), conexao.getConexao().getLocal(), 10);
+				MyWaypoint pontoDestino = new MyWaypoint(Color.ORANGE, conexao.getDestino().getCodigo(), conexao.getDestino().getLocal(), 10);
+
+				Tracado tr = new Tracado();
+				tr.setWidth(2);
+				tr.setCor(Color.CYAN);
+				tr.addPonto(conexao.getOrigem().getLocal());
+				tr.addPonto(conexao.getConexao().getLocal());
+				tr.addPonto(conexao.getDestino().getLocal());
+
+				lstPoints.add(pontoOrigem);
+				lstPoints.add(pontoConexao);
+				lstPoints.add(pontoDestino);
+				gerenciador.addTracado(tr);
+				gerenciador.setPontos(lstPoints);
+			}
+			gerenciador.alterarCentro(origem.getLocal());
+			gerenciador.getMapKit().repaint();
+		});
 
 	}
 
