@@ -245,6 +245,10 @@ public class GerenciadorMapa {
 		return selCentro;
 	}
 
+	public void alterarCentro(GeoPosition geo) {
+		jXMapKit.setAddressLocation(geo);
+	}
+
 	/*
 	 * Informa os pontos a serem desenhados (precisa ser chamado a cada vez que
 	 * mudar)
