@@ -18,6 +18,13 @@ public class Geo extends GeoPosition {
 		//return distancia(this, outra);
 	}
 
+	public double duracaoViagem(Geo locConexao, Geo locDestino) {
+		double distRota1 = this.distancia(locConexao);
+		double distRota2 = locConexao.distancia(locDestino);
+		double dist = distRota1 + distRota2;
+		return (dist/VELOCIDADEPADRAO);
+	}
+
 	public double duracaoViagem(Geo geo) {
 		double dist = this.distancia(geo);
 		return (dist/VELOCIDADEPADRAO);

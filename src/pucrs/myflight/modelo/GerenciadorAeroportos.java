@@ -74,18 +74,37 @@ public class GerenciadorAeroportos {
         return null;
     }
 
-    public ArrayList<Aeroporto> listarAeroportosAlcancaveisAteUmTempo(Aeroporto origem, double numeroHoras, GerenciadorRotas gr) {
-        ArrayList<Rota> rotasDeUmaOrigem = new ArrayList<>(gr.getRotasComUmaOrigemEspecifica(origem));
+    public ArrayList<Conexao> listarAeroportosAlcancaveisAteUmTempo (Aeroporto origem, double numeroHoras, GerenciadorRotas gr){
+        ArrayList<Rota> rotasDaPrimeiraOrigem = new ArrayList<>(gr.getRotasComUmaOrigemEspecifica(origem));
         Set<Aeroporto> listaAeroportos = new HashSet<>();
-        for(Rota rota: rotasDeUmaOrigem){
-            Aeroporto aero = rota.getDestino();
-            double duracaoViagem = origem.getLocal().duracaoViagem(aero.getLocal());
+        ArrayList<Conexao> conexoes = new ArrayList<>();
 
-            if(duracaoViagem < numeroHoras)
-                listaAeroportos.add(aero);
+        for(Rota rota: rotasDaPrimeiraOrigem){
+            for(Rota r: gr.getRotasComUmaOrigemEspecifica(rota.getDestino())) {
+                Conexao c = new Conexao(rota.getOrigem(), r.getOrigem(), r.getDestino());
+                double duracaoViagem = c.getOrigem().getLocal().duracaoViagem(c.getConexao().getLocal(), c.getDestino().getLocal());
+                if(duracaoViagem < numeroHoras) {
+                    conexoes.add(c);
+                }
+            }
         }
-        return new ArrayList<>(listaAeroportos);
+
+        return conexoes;
+
     }
+
+//    public ArrayList<Aeroporto> listarAeroportosAlcancaveisAteUmTempo(Aeroporto origem, double numeroHoras, GerenciadorRotas gr) {
+//        ArrayList<Rota> rotasDeUmaOrigem = new ArrayList<>(gr.getRotasComUmaOrigemEspecifica(origem));
+//        Set<Aeroporto> listaAeroportos = new HashSet<>();
+//        for(Rota rota: rotasDeUmaOrigem){
+//            Aeroporto aero = rota.getDestino();
+//            double duracaoViagem = origem.getLocal().duracaoViagem(aero.getLocal());
+//
+//            if(duracaoViagem < numeroHoras)
+//                listaAeroportos.add(aero);
+//        }
+//        return new ArrayList<>(listaAeroportos);
+//    }
 
     public ArrayList<Aeroporto> listarAeroportosPorCodCompanhia(String codCompanhia, GerenciadorRotas gr) {
         ArrayList<Rota> rotas = gr.listarRotasPorCodCompanhia(codCompanhia);

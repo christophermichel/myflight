@@ -39,6 +39,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import pucrs.myflight.modelo.*;
+import pucrs.myflight.modelo.models.Conexao;
 import pucrs.myflight.modelo.models.TrafegoAeroporto;
 
 public class JanelaFX extends Application {
@@ -49,8 +50,8 @@ public class JanelaFX extends Application {
 	private GerenciadorAeroportos gerAero;
 	private GerenciadorRotas gerRotas;
 	private GerenciadorAeronaves gerAvioes;
-	private GerenciadorPaises gerPaises;
 
+	private GerenciadorPaises gerPaises;
 	private GerenciadorMapa gerenciador;
 
 	private EventosMouse mouse;
@@ -268,21 +269,25 @@ public class JanelaFX extends Application {
 		consultar.setOnAction(e -> {
 
 			double numeroHoras = Double.parseDouble(tempo.getText());
-			ArrayList<Aeroporto> aeroportos = gerAero.listarAeroportosAlcancaveisAteUmTempo(comboAero.getValue(), numeroHoras, gerRotas);
+//			ArrayList<Aeroporto> aeroportos = gerAero.listarAeroportosAlcancaveisAteUmTempo(comboAero.getValue(), numeroHoras, gerRotas);
 
-			lstPoints.add(new MyWaypoint(Color.RED, comboAero.getValue().getCodigo(), comboAero.getValue().getLocal(), 50));
+			lstPoints.add(new MyWaypoint(Color.RED, comboAero.getValue().getCodigo(), comboAero.getValue().getLocal(), 10));
 
-
-			for(Aeroporto a: aeroportos) {
-				Tracado tr = new Tracado();
-				tr.setLabel("Teste");
-				tr.setWidth(5);
-				tr.setCor(new Color(0,0,0,60));
-				tr.addPonto(comboAero.getValue().getLocal());
-				tr.addPonto(a.getLocal());
-				gerenciador.addTracado(tr);
-				lstPoints.add(new MyWaypoint(Color.BLUE, a.getCodigo(), a.getLocal(), 35));
+			for(Conexao c: gerAero.listarAeroportosAlcancaveisAteUmTempo(comboAero.getValue(), numeroHoras, gerRotas)) {
+				lstPoints.add(new MyWaypoint(Color.RED, c.getConexao().getCodigo(), c.getConexao().getLocal(), 10));
+				lstPoints.add(new MyWaypoint(Color.CYAN, c.getDestino().getCodigo(), c.getDestino().getLocal(), 5));
 			}
+
+//			for(Aeroporto a: aeroportos) {
+////				Tracado tr = new Tracado();
+////				tr.setLabel("Teste");
+////				tr.setWidth(5);
+////				tr.setCor(new Color(0,0,0,60));
+////				tr.addPonto(comboAero.getValue().getLocal());
+////				tr.addPonto(a.getLocal());
+////				gerenciador.addTracado(tr);
+//				lstPoints.add(new MyWaypoint(Color.BLUE, a.getCodigo(), a.getLocal(), 35));
+//			}
 			gerenciador.setPontos(lstPoints);
 			gerenciador.getMapKit().repaint();
 		});
