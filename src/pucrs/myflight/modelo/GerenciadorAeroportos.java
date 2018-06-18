@@ -6,6 +6,7 @@ import pucrs.myflight.modelo.models.TrafegoAeroporto;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -75,36 +76,42 @@ public class GerenciadorAeroportos {
     }
 
     public ArrayList<Conexao> listarAeroportosAlcancaveisAteUmTempo (Aeroporto origem, double numeroHoras, GerenciadorRotas gr){
-        ArrayList<Rota> rotasDaPrimeiraOrigem = new ArrayList<>(gr.getRotasComUmaOrigemEspecifica(origem));
-        Set<Aeroporto> listaAeroportos = new HashSet<>();
-        ArrayList<Conexao> conexoes = new ArrayList<>();
 
-        for(Rota rota: rotasDaPrimeiraOrigem){
-            for(Rota r: gr.getRotasComUmaOrigemEspecifica(rota.getDestino())) {
-                Conexao c = new Conexao(rota.getOrigem(), r.getOrigem(), r.getDestino());
-                double duracaoViagem = c.getOrigem().getLocal().duracaoViagem(c.getConexao().getLocal(), c.getDestino().getLocal());
-                if(duracaoViagem < numeroHoras) {
-                    conexoes.add(c);
+        ArrayList<Conexao> conexoes = new ArrayList<>();
+        double distanciaPossivelPercorrer = origem.getLocal().VELOCIDADEPADRAO * numeroHoras;
+        ArrayList<Aeroporto> aeroportosVooDireto = listarAeroportosAlcancaveisAteUmTempoVooDireto(origem, numeroHoras, gr);
+
+        for(Aeroporto aeroPrimeiroVoo: aeroportosVooDireto) {
+            double distanciaPrimeiroTrecho = origem.getLocal().distancia(aeroPrimeiroVoo.getLocal());
+            ArrayList<Aeroporto> aeroportosDestinoFinal = listarAeroportosDestinoPossiveis(aeroPrimeiroVoo, gr);
+
+            for(Aeroporto aeroDestino : aeroportosDestinoFinal) {
+                if(!aeroDestino.getCodigo().equals(origem.getCodigo())) {
+                    double distanciaSegundoTrecho = aeroPrimeiroVoo.getLocal().distancia(aeroDestino.getLocal());
+                    double distanciaTotal = distanciaPrimeiroTrecho + distanciaSegundoTrecho;
+
+                    if(distanciaTotal < distanciaPossivelPercorrer) {
+                        Conexao conexao = new Conexao(origem, aeroPrimeiroVoo, aeroDestino);
+                        conexoes.add(conexao);
+                    }
                 }
             }
         }
-
         return conexoes;
-
     }
 
-//    public ArrayList<Aeroporto> listarAeroportosAlcancaveisAteUmTempo(Aeroporto origem, double numeroHoras, GerenciadorRotas gr) {
-//        ArrayList<Rota> rotasDeUmaOrigem = new ArrayList<>(gr.getRotasComUmaOrigemEspecifica(origem));
-//        Set<Aeroporto> listaAeroportos = new HashSet<>();
-//        for(Rota rota: rotasDeUmaOrigem){
-//            Aeroporto aero = rota.getDestino();
-//            double duracaoViagem = origem.getLocal().duracaoViagem(aero.getLocal());
-//
-//            if(duracaoViagem < numeroHoras)
-//                listaAeroportos.add(aero);
-//        }
-//        return new ArrayList<>(listaAeroportos);
-//    }
+    public ArrayList<Aeroporto> listarAeroportosAlcancaveisAteUmTempoVooDireto(Aeroporto origem, double numeroHoras, GerenciadorRotas gr) {
+        ArrayList<Rota> rotasDeUmaOrigem = new ArrayList<>(gr.getRotasComUmaOrigemEspecifica(origem));
+        Set<Aeroporto> listaAeroportos = new HashSet<>();
+        for(Rota rota: rotasDeUmaOrigem){
+            Aeroporto aero = rota.getDestino();
+            double duracaoViagem = origem.getLocal().duracaoViagem(aero.getLocal());
+
+            if(duracaoViagem < numeroHoras)
+                listaAeroportos.add(aero);
+        }
+        return new ArrayList<>(listaAeroportos);
+    }
 
     public ArrayList<Aeroporto> listarAeroportosPorCodCompanhia(String codCompanhia, GerenciadorRotas gr) {
         ArrayList<Rota> rotas = gr.listarRotasPorCodCompanhia(codCompanhia);
@@ -127,6 +134,15 @@ public class GerenciadorAeroportos {
                 .stream()
                 .filter(aero -> aero.getCodPais().equals(codPais))
                 .collect(Collectors.toCollection(ArrayList::new));
+    }
+
+    public ArrayList<Aeroporto> listarAeroportosDestinoPossiveis(Aeroporto origem, GerenciadorRotas gr) {
+        Set<Aeroporto> aeros = new HashSet<>();
+        aeros = gr.getRotasComUmaOrigemEspecifica(origem)
+                .stream()
+                .map(x -> x.getDestino())
+                .collect(Collectors.toSet());
+        return new ArrayList<>(aeros);
     }
 
     public ArrayList<TrafegoAeroporto> estimativaTrafegoPorAeroporto (GerenciadorRotas gr) {
@@ -171,4 +187,6 @@ public class GerenciadorAeroportos {
 
         return new ArrayList<>(conexao);
     }
+
+
 }
