@@ -186,7 +186,18 @@ public class JanelaFX extends Application {
 			ArrayList<Aeroporto> aeroportos = gerAero.listarAeroportosPorCodCompanhia(comboCia.getValue().getCodigo(), gerRotas);
 
 			for (Aeroporto a: aeroportos) {
-				lstPoints.add(new MyWaypoint(Color.RED, a.getCodigo(), a.getLocal(), 5));
+				lstPoints.add(new MyWaypoint(Color.RED, a.getCodigo(), a.getLocal(), 10));
+			}
+
+			ArrayList<Rota> rotas = gerRotas.listarRotasPorCodCompanhia(comboCia.getValue().getCodigo());
+
+			for(Rota rota : rotas) {
+				Tracado tr = new Tracado();
+				tr.setWidth(2);
+				tr.setCor(Color.ORANGE);
+				tr.addPonto(rota.getOrigem().getLocal());
+				tr.addPonto(rota.getDestino().getLocal());
+				gerenciador.addTracado(tr);
 			}
 
 			gerenciador.alterarCentro(aeroportos.get(0).getLocal());
