@@ -179,6 +179,7 @@ public class JanelaFX extends Application {
 		comboCia = new ComboBox(FXCollections.observableList(gerCias.listarTodas()));
 		comboCia.setPromptText("Selecione a Cia...");
 		leftPane.add(comboCia, 0, 1);
+		comboCia.setMaxSize(200,200);
 		Button consultar = new Button("Consultar");
 		leftPane.add(consultar, 0,2);
 		consultar.setOnAction(e -> {
@@ -216,6 +217,7 @@ public class JanelaFX extends Application {
 		buscaVolumeEmUmPais.setOnAction(e -> {
 			comboPais = new ComboBox(FXCollections.observableList(gerPaises.listarTodas()));
 			comboPais.setPromptText("Selecione o país...");
+			comboPais.setMaxSize(200, 200);
 			leftPane.add(comboPais, 2,3);
 			Button consultar = new Button("Consultar");
 			leftPane.add(consultar, 2,4);
@@ -236,9 +238,11 @@ public class JanelaFX extends Application {
 		gerenciador.clear();
 
 		comboAero = new ComboBox(FXCollections.observableList(gerAero.listarTodos()));
-		comboAero.setPromptText("Selecione o aeroporto de origem...");
+		comboAero.setPromptText("Aeroporto de origem...");
+		comboAero.setMaxSize(200, 200);
 		comboAero2 = new ComboBox(FXCollections.observableList(gerAero.listarTodos()));
-		comboAero2.setPromptText("Selecione o aeroporto de destino...");
+		comboAero2.setPromptText("Aeroporto de destino...");
+		comboAero2.setMaxSize(200, 200);
 		leftPane.add(comboAero, 3, 1);
 		leftPane.add(comboAero2, 3, 2);
 		Button consultar = new Button("Consultar");
@@ -282,11 +286,13 @@ public class JanelaFX extends Application {
 
 		comboAero = new ComboBox(FXCollections.observableList(gerAero.listarTodos()));
 		comboAero.setPromptText("Selecione o aeroporto...");
+		comboAero.setMaxSize(200,200);
 		leftPane.add(comboAero, 4, 1);
 		leftPane.add(tempo = new TextField(), 4, 2);
 		Button consultar = new Button("Consultar");
 		leftPane.add(consultar, 4, 3);
 
+		tempo.setPromptText("Numero de horas...");
 		tempo.textProperty().addListener(new ChangeListener<String>() {
 			@Override
 			public void changed(ObservableValue<? extends String> observable, String oldValue,
