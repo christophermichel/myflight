@@ -6,21 +6,22 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Scanner;
 
-public class GerenciadorCias {
-    private Map<String, CiaAerea> empresas;
+public class GerenciadorPaises {
+    private ArrayList<Pais> paises;
 
-    public GerenciadorCias(){
-        this.empresas = new LinkedHashMap<>();
-        carregaDados("airlines.dat");
+    public GerenciadorPaises() {
+        this.paises = new ArrayList<>();
+        carregaDados("countries.dat");
     }
 
-    public ArrayList<CiaAerea> listarTodas() {
-        return new ArrayList<>(empresas.values());
-    }
+    public void adicionar(Pais pais) { this.paises.add(pais); }
 
     public void carregaDados(String nomeArq){
+
         Path path2 = Paths.get(nomeArq);
         try (BufferedReader br = Files.newBufferedReader(path2, Charset.defaultCharset()))
         {
@@ -29,11 +30,12 @@ public class GerenciadorCias {
             while((linha = br.readLine()) != null) {
                 Scanner sc = new Scanner(linha).useDelimiter(";"); // separador é ;
                 String codigo, nome;
+
                 codigo = sc.next();
                 nome = sc.next();
 
-                CiaAerea cia = new CiaAerea(codigo, nome);
-                this.empresas.put(cia.getCodigo(), cia);
+                Pais pais = new Pais(codigo, nome);
+                this.paises.add(pais);
             }
         }
         catch (IOException x) {
@@ -44,23 +46,18 @@ public class GerenciadorCias {
         }
     }
 
-    public void adicionar(CiaAerea cia1) {
-        empresas.put(cia1.getCodigo(),
-                cia1);
-    }
+    public ArrayList<Pais> listarTodas() { return new ArrayList<>(paises); }
 
-    public CiaAerea buscarCodigo(String cod) {
-        return empresas.get(cod);
-//        for (CiaAerea cia : empresas)
-//            if (cia.getCodigo().equals(cod))
-//                return cia;
-//        return null;
-    }
-
-    public CiaAerea buscarNome(String nome) {
-        for(CiaAerea cia: empresas.values())
-           if(cia.getNome().equals(nome))
-               return cia;
+    public Pais buscarPorCodigo(String codigo) {
+        for (Pais p : paises)
+            if (p.getCodigo().equals(codigo))
+                return p;
         return null;
     }
+
+    public void ordenaCodigo() { paises.sort(Comparator.comparing(Pais::getCodigo));}
+
+    public void ordenaNome() { paises.sort(Comparator.comparing(Pais::getNome)); }
+
+
 }

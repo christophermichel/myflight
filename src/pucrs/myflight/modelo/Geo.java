@@ -1,46 +1,66 @@
 package pucrs.myflight.modelo;
 
-public class Geo {
-	private double latitude;
-	private double longitude;
+import org.jxmapviewer.viewer.GeoPosition;
+
+// Geo herda de GeoPosition, que é a classe usada internamente
+// pelo desenhador do mapa (não faz sentido recriar tudo novamente...)
+public class Geo extends GeoPosition {
 	
 	public Geo(double latitude, double longitude) {
-		this.latitude = latitude;
-		this.longitude = longitude;
+		super(latitude, longitude);		
+	}
+	public final double VELOCIDADEPADRAO = 805;
+	// Metodo para calcular a distancia entre
+	// ESTA localizacao e o outra informada
+	public double distancia(Geo outra) {
+		Geo obj = new Geo(getLatitude(), getLongitude());
+		return distancia(obj, outra);
+		//return distancia(this, outra);
 	}
 
-	public double distancia(Geo p2) {
-	    return distancia(this, p2);
-    }
+	public double duracaoViagem(Geo locConexao, Geo locDestino) {
+		double distRota1 = this.distancia(locConexao);
+		double distRota2 = locConexao.distancia(locDestino);
+		double dist = distRota1 + distRota2;
+		return (dist/VELOCIDADEPADRAO);
+	}
 
-	public static double distancia(Geo p1, Geo p2) {
-	    double lat1 = Math.toRadians(p1.latitude);
-        double lat2 = Math.toRadians(p2.latitude);
-        double lon1 = Math.toRadians(p1.longitude);
-        double lon2 = Math.toRadians(p2.longitude);
-
-        double diflat = (lat1 - lat2)/2;
-        diflat = Math.sin(diflat) * Math.sin(diflat);
-
-        double diflon = (lon1 - lon2)/2;
-        diflon = Math.sin(diflon) * Math.sin(diflon);
-
-        double aux = diflat + diflon * Math.cos(lat1)*Math.cos(lat2);
-        aux = Math.sqrt(aux);
-
-        return 2*6371 * Math.asin(aux);
+	public double duracaoViagem(Geo geo) {
+		double dist = this.distancia(geo);
+		return (dist/VELOCIDADEPADRAO);
 	}
 	
-	public double getLatitude() {
-		return latitude;
-	}
+	// Metodo de classe (static) para calcular
+	// distancias entre dois objetos Geo informados
+	public static double distancia(Geo geo1, Geo geo2) {
+		double lat1 = Math.toRadians(geo1.getLatitude());
+		double lat2 = Math.toRadians(geo2.getLatitude());
+		double lon1 = Math.toRadians(geo1.getLongitude());
+		double lon2 = Math.toRadians(geo2.getLongitude());
+		
+		double diflat = (lat1-lat2)/2;
+		double diflon = (lon1-lon2)/2;
+		
+		double d = Math.pow(Math.sin(diflat),2)+
+				   Math.pow(Math.sin(diflon),2)*
+				   Math.cos(lat1) * Math.cos(lat2);
+		
+		d = 2 * 6371 * Math.asin(Math.sqrt(d));
+				
+		return d;	
+	}	
 	
-	public double getLongitude() {
-		return longitude;
-	}
-
 	@Override
 	public String toString() {
-		return latitude + ", " + longitude;
+		String lat = ""+getLatitude();
+		String lon = ""+getLongitude();
+		if(getLatitude() < 0)
+			lat = -getLatitude()+" S";
+		else lat = getLatitude()+" N";
+		if(getLongitude() < 0)
+			lon = -getLongitude()+" W";
+		else lon = getLongitude()+" E";
+		return "("+lat+", "+lon+")";
 	}
+	
 }

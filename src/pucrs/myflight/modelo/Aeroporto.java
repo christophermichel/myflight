@@ -4,11 +4,21 @@ public class Aeroporto implements Comparable<Aeroporto> {
 	private String codigo;
 	private String nome;
 	private Geo loc;
-	
+	private String codPais;
+
+	//Construtor mantido devido à erro na classe JanelaFX
 	public Aeroporto(String codigo, String nome, Geo loc) {
 		this.codigo = codigo;
 		this.nome = nome;
 		this.loc = loc;
+	}
+
+	//nao verifica se o codPais existe
+	public Aeroporto(String codigo, String nome, Geo loc, String codPais) {
+		this.codigo = codigo;
+		this.nome = nome;
+		this.loc = loc;
+		this.codPais = codPais;
 	}
 	
 	public String getCodigo() {
@@ -21,6 +31,10 @@ public class Aeroporto implements Comparable<Aeroporto> {
 	
 	public Geo getLocal() {
 		return loc;
+	}
+
+	public String getCodPais() {
+		return this.codPais;
 	}
 
     @Override

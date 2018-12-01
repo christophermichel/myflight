@@ -1,7 +1,13 @@
 package pucrs.myflight.modelo;
 
-import java.util.ArrayList;
-import java.util.Collections;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class GerenciadorRotas {
 
@@ -9,6 +15,43 @@ public class GerenciadorRotas {
 
     public GerenciadorRotas() {
         this.rotas = new ArrayList<>();
+        carregaDados("routes.dat");
+    }
+
+    public void carregaDados(String nomeArq){
+
+        Path path2 = Paths.get(nomeArq);
+        try (BufferedReader br = Files.newBufferedReader(path2, Charset.defaultCharset()))
+        {
+            String header = br.readLine();
+            String linha = null;
+
+            GerenciadorCias gerenciadorCias = new GerenciadorCias();
+            GerenciadorAeroportos gerenciadorAeroportos = new GerenciadorAeroportos();
+            GerenciadorAeronaves gerenciadorAeronaves = new GerenciadorAeronaves();
+
+            while((linha = br.readLine()) != null) {
+                Scanner sc = new Scanner(linha).useDelimiter(";"); // separador é ;
+                String codCia, codAeroOrigem, codAeroDestino, codeshare, paradas, codAeronave;
+
+                codCia = sc.next();
+                codAeroOrigem = sc.next();
+                codAeroDestino = sc.next();
+                codeshare = sc.next();
+                paradas = sc.next();
+                codAeronave = sc.next();
+
+                Rota rota = new Rota(gerenciadorCias.buscarCodigo(codCia), gerenciadorAeroportos.buscarCodigo(codAeroOrigem),
+                        gerenciadorAeroportos.buscarCodigo(codAeroDestino), gerenciadorAeronaves.buscarCodigo(codAeronave));
+                this.rotas.add(rota);
+            }
+        }
+        catch (IOException x) {
+            System.err.format("Erro na manipulação do arquivo.");
+        }
+        catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     public void ordenarCias() {
@@ -37,6 +80,7 @@ public class GerenciadorRotas {
                    r2.getCia().getNome());
         });
     }
+
     public void adicionar(Rota r) {
         rotas.add(r);
     }
@@ -51,5 +95,33 @@ public class GerenciadorRotas {
             if(r.getOrigem().getCodigo().equals(codigo))
                 result.add(r);
         return result;
+    }
+
+    public ArrayList<Rota> getRotasComUmaOrigemEspecifica(Aeroporto origem) {
+        return this.rotas
+                .stream()
+                .filter(rota -> rota.getOrigem().getCodigo().equals(origem.getCodigo()))
+                .collect(Collectors.toCollection(ArrayList::new));
+    }
+
+    public ArrayList<Rota> listarRotasComUmDestino(Aeroporto destino) {
+        return this.rotas
+                .stream()
+                .filter(rota -> rota.getDestino().getCodigo().equals(destino.getCodigo()))
+                .collect(Collectors.toCollection(ArrayList::new));
+    }
+
+    public ArrayList<Rota> listarRotasPorCodCompanhia(String codCompanhia) {
+        return this.rotas.stream()
+                         .filter(x -> x.getCia().getCodigo().equals(codCompanhia))
+                         .collect(Collectors.toCollection(ArrayList::new));
+    }
+
+    public ArrayList<Rota> listarRotasPorCodigoAeroporto(String codigoAeroporto) {
+        return this.rotas
+                   .stream()
+                   .filter(rota -> rota.getDestino().getCodigo().equals(codigoAeroporto) ||
+                           rota.getOrigem().getCodigo().equals(codigoAeroporto))
+                   .collect(Collectors.toCollection(ArrayList::new));
     }
 }
